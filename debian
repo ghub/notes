@@ -1,0 +1,227 @@
+201404
+
+Install Debian testing jessie amd64
+
+
+Preparation
+===========
+
+Machine
+
+Acer Aspire 5742G-7220
+Intel Core i5-460M CPU @2.53GHz
+15.6" HD LED LCD 1366x768
+NVIDIA GeForce GT 420M CUDA 2GB
+8GB DDR3 RAM
+M4-CT128M4SSD2 SSD
+Acer Nplify 802.11b/g/n
+6-cell Li-ion battery
+
+BIOS
+
+InsydeH2O Setup Utility Rev 3.5
+System BIOS Version V1.05
+VGA BIOS Version nVidia N11P-GE VER70.08.19.00.05
+
+lspci -nn
+
+00:00.0 Host bridge [0600]: Intel Corporation Core Processor DRAM Controller [8086:0044] (rev 02)
+00:01.0 PCI bridge [0604]: Intel Corporation Core Processor PCI Express x16 Root Port [8086:0045] (rev 02)
+00:16.0 Communication controller [0780]: Intel Corporation 5 Series/3400 Series Chipset HECI Controller [8086:3b64] (rev 06)
+00:1a.0 USB controller [0c03]: Intel Corporation 5 Series/3400 Series Chipset USB2 Enhanced Host Controller [8086:3b3c] (rev 05)
+00:1b.0 Audio device [0403]: Intel Corporation 5 Series/3400 Series Chipset High Definition Audio [8086:3b56] (rev 05)
+00:1c.0 PCI bridge [0604]: Intel Corporation 5 Series/3400 Series Chipset PCI Express Root Port 1 [8086:3b42] (rev 05)
+00:1c.1 PCI bridge [0604]: Intel Corporation 5 Series/3400 Series Chipset PCI Express Root Port 2 [8086:3b44] (rev 05)
+00:1d.0 USB controller [0c03]: Intel Corporation 5 Series/3400 Series Chipset USB2 Enhanced Host Controller [8086:3b34] (rev 05)
+00:1e.0 PCI bridge [0604]: Intel Corporation 82801 Mobile PCI Bridge [8086:2448] (rev a5)
+00:1f.0 ISA bridge [0601]: Intel Corporation Mobile 5 Series Chipset LPC Interface Controller [8086:3b09] (rev 05)
+00:1f.2 SATA controller [0106]: Intel Corporation 5 Series/3400 Series Chipset 4 port SATA AHCI Controller [8086:3b29] (rev 05)
+00:1f.3 SMBus [0c05]: Intel Corporation 5 Series/3400 Series Chipset SMBus Controller [8086:3b30] (rev 05)
+00:1f.6 Signal processing controller [1180]: Intel Corporation 5 Series/3400 Series Chipset Thermal Subsystem [8086:3b32] (rev 05)
+01:00.0 VGA compatible controller [0300]: NVIDIA Corporation GF108M [GeForce GT 420M] [10de:0df1] (rev a1)
+01:00.1 Audio device [0403]: NVIDIA Corporation GF108 High Definition Audio Controller [10de:0bea] (rev a1)
+02:00.0 Ethernet controller [0200]: Broadcom Corporation NetLink BCM57780 Gigabit Ethernet PCIe [14e4:1692] (rev 01)
+03:00.0 Network controller [0280]: Broadcom Corporation BCM43225 802.11b/g/n [14e4:4357] (rev 01)
+ff:00.0 Host bridge [0600]: Intel Corporation Core Processor QuickPath Architecture Generic Non-core Registers [8086:2c62] (rev 02)
+ff:00.1 Host bridge [0600]: Intel Corporation Core Processor QuickPath Architecture System Address Decoder [8086:2d01] (rev 02)
+ff:02.0 Host bridge [0600]: Intel Corporation Core Processor QPI Link 0 [8086:2d10] (rev 02)
+ff:02.1 Host bridge [0600]: Intel Corporation Core Processor QPI Physical 0 [8086:2d11] (rev 02)
+ff:02.2 Host bridge [0600]: Intel Corporation Core Processor Reserved [8086:2d12] (rev 02)
+ff:02.3 Host bridge [0600]: Intel Corporation Core Processor Reserved [8086:2d13] (rev 02)
+
+
+Install Base System
+===================
+
+Debian Installer Jessie Alpha 1 release
+
+Errata: Firmware handling: The udev component no longer reports missing firmware (Bug #725714)
+
+Network install from a minimal CD: debian-jessie-DI-a1-amd64-netinst.iso
+
+dmesg # find out USB drive letter;
+# make sure it is bootable FAT
+sudo cp *.iso /dev/sd?; sync
+sudo reboot # F2 to configure BIOS
+
+Net install hung on ethdetect.
+more /var/log/syslog
+It seemed Broadcom firmware is missing.
+
+Network install from a minimal CD with non-free firmware: firmware-jessie-DI-a1-amd64-netinst.iso
+Still hung.
+
+Expert Install - Run Shell
+
+sudo echo "blacklist b43" > /etc/modprobe.d/b43
+sudo echo "blacklist brcmsmac" > /etc/modprobe.d/brcmsmac
+
+Then ethdetect.
+Continue with eth0.
+Reboot.
+
+
+Setup WiFi
+==========
+
+See wiki.debian.org/WiFi.
+
+Install Driver
+
+sudo apt-get update
+sudo apt-get install firmware-brcm80211
+sudo apt-get install firmware-linux-nonfree
+sudo reboot
+lsmod | grep -E "80211|brcm"
+lspci -d 14e4: -knn
+
+Configure Device
+
+Google "Linux Commando WPA"
+
+sudo apt-get install iw
+sudo apt-get install wpasupplicant
+
+/sbin/iw dev # find wireless device name
+ip link show wlan0 # check if device is up
+# <BROADCAST,MULTICAST> means not up
+# <BROADCAST,MULTICAST,UP> means up
+sudo ip link set wlan0 up # bring it up
+# if hang, driver is not loaded properly
+/sbin/iw wlan0 link # check connection
+sudo /sbin/iw wlan0 scan # scan for SSID and RSN(WPA2)
+sudo -s
+wpa_passphrase SSID >> /etc/wpa_supplicant.conf
+...type in the passphrase and hit enter...
+chmod 600 /etc/wpa_supplicant.conf
+exit
+sudo wpa_supplicant -B -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf
+# if you get "ioctl[SIOCSIWENCODEEXT]: Invalid argument", check driver name
+/sbin/iw wlan0 link # check connection
+sudo dhclient wlan0 # obtain IP by DHCP
+ip addr show wlan0 # verify IP
+
+Edit /etc/network/interfaces to be like:
+
+auto lo
+iface lo inet loopback
+
+allow-hotplug eth0
+iface eth0 inet dhcp
+
+auto wlan0
+iface wlan0 inet dhcp
+wpa-driver nl80211
+wpa-conf /etc/wpa_supplicant.conf
+
+End of /etc/network/interfaces
+
+sudo reboot
+
+
+Setup SSD
+=========
+
+See wiki.debian.org/SSDOptimization.
+See wiki.archlinux.org/index.php/fstab.
+
+Ensure BIOS sets SATA to AHCI.
+
+sudo apt-get install smartmontools
+smartctl -a /dev/sda # check for issues
+
+Modify /etc/fstab to add noatime to ext4
+Modify /etc/lvm/lvm.conf to set issue_discards = 1
+sudo /usr/sbin/update-initramfs -u -k all
+sudo reboot
+
+Create /etc/cron.weekly/trim_ssd to contain:
+time /sbin/fstrim -v /
+
+
+Setup X
+=======
+
+See wiki.debian.org/Xorg.
+See wiki.debian.org/NvidiaGraphicsDrivers.
+
+sudo apt-get install xorg
+sudo apt-get install linux-headers-$(uname -r|sed 's,[^-]*-[^-]*-,,')
+sudo apt-get install nvidia-kernel-dkms
+sudo mkdir /etc/X11/xorg.conf.d
+Create /etc/X11/xorg.conf.d/20-nvidia.conf to contain:
+Section "Device"
+	Identifier "nVidia GeForce GT 420M"
+	Driver "nvidia"
+EndSection
+
+sudo reboot
+
+startx
+Run nvidia-settings as root, then save to 20-nvidia.conf.
+sudo reboot
+sudo apt-get install mesa-utils
+
+
+Setup LXDE
+==========
+
+sudo apt-get install lxde
+sudo apt-get install lsb-release # for lxsession-logout (Bug #719614)
+sudo reboot
+
+Right click lxpanel, then select Panel Settings.
+lxpanelctl restart
+
+
+Setup LUKS
+==========
+
+sudo -s
+
+mkdir /etc/crypttab.keys
+echo -n ... > /etc/crypttab.keys/sdb1
+echo "sdb1_crypt UUID=... /etc/crypttab.keys/sdb1 luks" >> /etc/crypttab
+echo "/dev/mapper/sdb1_crypt /backup ext4 errors=remount-ro 0 2" >> /etc/fstab
+cryptdisk_start sdb1_crypt
+mount -a
+umount /backup
+cryptdisk_stop sdb1_crypt
+
+echo "sda5_crypt UUID=... /dev/disk/by-uuid/...:/sda5 luks,discard,keyscript=passdev" >> /etc/crypttab
+/usr/sbin/update-initramfs -u -k all
+reboot
+
+Setup Terminal
+==============
+
+ln -s /usr/share/applications/rxvt-unicode.desktop .config/autostart/rxvt-unicode.desktop
+sudo apt-get install wmctrl
+Edit .config/autostart/rxvt-unicode-mv-fullscreen.desktop to contain:
+[Desktop Entry]
+Type=Application
+Exec=/$HOME/bin/urxvt_mv_fullscreen.sh
+OnlyShowIn=LXDE
+
+Edit /etc/default/keyboard to contain:
+XKBOPTIONS="caps:ctrl_modifier,shift:both_capslock"
