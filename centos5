@@ -1,0 +1,34 @@
+HOST
+
+~/.bashrc
+~/.ssh/config
+/etc/apt/sources.list
+/etc/fstab
+/etc/modprobe.d/pcspeaker-blacklist.conf
+/etc/rinse/rinse.conf
+/etc/schroot/chroot.d/centos-5.conf
+/etc/sudoers
+/etc/xdg/lxsession/LXDE/autostart
+
+GUEST
+
+chown gu+w /dev/null
+/etc/yum.repos.d
+
+yum install csh
+yum install gnome-desktop
+yum install libXtst-devel
+yum install pstack
+yum install sudo
+
+#yum install fontconfig
+#yum install libpng
+#yum install libXrender
+#yum install xorg-x11-xsm
+
+rpm -ih stngtestd*rpm
+rpm -ih squishrun*rpm
+
+cd /etc
+mv localtime{,.org}
+ln -s /usr/share/zoneinfo/Canada/Mountain localtime
