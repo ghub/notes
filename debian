@@ -225,3 +225,9 @@ OnlyShowIn=LXDE
 
 Edit /etc/default/keyboard to contain:
 XKBOPTIONS="caps:ctrl_modifier,shift:both_capslock"
+
+Setup Oracle Java
+=================
+
+See ~/bin/apt_java.sh, which is based on
+http://www.webupd8.org/2014/03/how-to-install-oracle-java-8-in-debian.html
