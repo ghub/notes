@@ -231,3 +231,7 @@ Setup Oracle Java
 
 See ~/bin/apt_java.sh, which is based on
 http://www.webupd8.org/2014/03/how-to-install-oracle-java-8-in-debian.html
+
+Setup Android Studio
+
+sudo apt-get install lib32z1 # for Android/Sdk/build-tools/21.1.2/aapt
