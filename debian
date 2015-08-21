@@ -226,6 +226,14 @@ OnlyShowIn=LXDE
 Edit /etc/default/keyboard to contain:
 XKBOPTIONS="caps:ctrl_modifier,shift:both_capslock"
 
+Setup Time
+==========
+
+sudo apt-get install ntp
+vi /etc/ntp.conf
+/etc/init.d/ntp restart
+ntpq -p
+
 Setup Oracle Java
 =================
 
