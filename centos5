@@ -10,9 +10,12 @@ HOST
 /etc/sudoers
 /etc/xdg/lxsession/LXDE/autostart
 
+Use rinse to install guest.
+
 GUEST
 
 chown gu+w /dev/null
+git clone git@github:dev-env/cdl-dev-env-client.git
 /etc/yum.repos.d
 
 yum install csh
