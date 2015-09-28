@@ -12,6 +12,8 @@ HOST
 
 Use rinse to install guest.
 
+xhost +local:0
+
 GUEST
 
 chown gu+w /dev/null
@@ -35,6 +37,16 @@ yum install gtk2-devel
 yum install SDL
 
 #yum install freeglut-devel
+yum install glx-utils
+sudo sh NVIDIA-Linux-x86-340.65.run \
+    --accept-license \
+    --no-distro-scripts \
+    --no-kernel-module \
+    --no-kernel-module-source \
+    --no-nvidia-modprobe \
+    --no-precompiled-interface \
+    --no-runlevel-check \
+    --no-x-check \
 
 rpm -ih stngtestd*rpm
 rpm -ih squishrun*rpm
