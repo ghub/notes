@@ -48,6 +48,10 @@ sudo sh NVIDIA-Linux-x86-340.65.run \
     --no-runlevel-check \
     --no-x-check \
 
+# For Qt designer
+dbus-uuidgen > /var/lib/dbus/machine-id
+yum install gstreamer-plugins-good
+
 rpm -ih stngtestd*rpm
 rpm -ih squishrun*rpm
 
