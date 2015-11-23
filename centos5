@@ -10,15 +10,19 @@ HOST
 /etc/sudoers
 /etc/xdg/lxsession/LXDE/autostart
 
-Use rinse to install guest.
+cd repo
+git clone git@github:dev-env/cdl-dev-env-client.git
+
+sudo rinse --distribution centos-5 --arch i386 --directory /srv/chroot/centos5_i386
+cd /srv/chroot/centos5_i386/etc
+sudo mv yum.repos.d{,.org}
+sudo ln -s ~/repo/cdl-dev-env-client/repo yum.repos.d
 
 xhost +local:0
 
 GUEST
 
-chown gu+w /dev/null
-git clone git@github:dev-env/cdl-dev-env-client.git
-/etc/yum.repos.d
+chmod gu+w /dev/null
 
 yum install csh
 yum install gnome-desktop
@@ -45,12 +49,14 @@ sudo sh NVIDIA-Linux-x86-340.65.run \
     --no-kernel-module-source \
     --no-nvidia-modprobe \
     --no-precompiled-interface \
-    --no-runlevel-check \
     --no-x-check \
 
 # For Qt designer
 dbus-uuidgen > /var/lib/dbus/machine-id
 yum install gstreamer-plugins-good
+
+yum install git
+yum install relscript
 
 rpm -ih stngtestd*rpm
 rpm -ih squishrun*rpm
