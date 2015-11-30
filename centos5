@@ -42,7 +42,7 @@ yum install SDL
 
 #yum install freeglut-devel
 yum install glx-utils
-sudo sh NVIDIA-Linux-x86-340.65.run \
+sudo sh NVIDIA-Linux-x86-340.96.run \
     --accept-license \
     --no-distro-scripts \
     --no-kernel-module \
