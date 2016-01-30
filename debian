@@ -41,13 +41,13 @@ lspci -nn
 01:00.0 VGA compatible controller [0300]: NVIDIA Corporation GF108M [GeForce GT 420M] [10de:0df1] (rev a1)
 01:00.1 Audio device [0403]: NVIDIA Corporation GF108 High Definition Audio Controller [10de:0bea] (rev a1)
 02:00.0 Ethernet controller [0200]: Broadcom Corporation NetLink BCM57780 Gigabit Ethernet PCIe [14e4:1692] (rev 01)
-03:00.0 Network controller [0280]: Broadcom Corporation BCM43225 802.11b/g/n [14e4:4357] (rev 01)
+03:00.0 Network controller [0280]: Intel Corporation Wireless 7260 [8086:08b1] (rev 73)
 ff:00.0 Host bridge [0600]: Intel Corporation Core Processor QuickPath Architecture Generic Non-core Registers [8086:2c62] (rev 02)
 ff:00.1 Host bridge [0600]: Intel Corporation Core Processor QuickPath Architecture System Address Decoder [8086:2d01] (rev 02)
 ff:02.0 Host bridge [0600]: Intel Corporation Core Processor QPI Link 0 [8086:2d10] (rev 02)
-ff:02.1 Host bridge [0600]: Intel Corporation Core Processor QPI Physical 0 [8086:2d11] (rev 02)
-ff:02.2 Host bridge [0600]: Intel Corporation Core Processor Reserved [8086:2d12] (rev 02)
-ff:02.3 Host bridge [0600]: Intel Corporation Core Processor Reserved [8086:2d13] (rev 02)
+ff:02.1 Host bridge [0600]: Intel Corporation 1st Generation Core i3/5/7 Processor QPI Physical 0 [8086:2d11] (rev 02)
+ff:02.2 Host bridge [0600]: Intel Corporation 1st Generation Core i3/5/7 Processor Reserved [8086:2d12] (rev 02)
+ff:02.3 Host bridge [0600]: Intel Corporation 1st Generation Core i3/5/7 Processor Reserved [8086:2d13] (rev 02)
 
 
 Install Base System
@@ -89,11 +89,11 @@ See wiki.debian.org/WiFi.
 Install Driver
 
 sudo apt-get update
-sudo apt-get install firmware-brcm80211
+sudo apt-get install firmware-iwlwifi
 sudo apt-get install firmware-linux-nonfree
 sudo reboot
-lsmod | grep -E "80211|brcm"
-lspci -d 14e4: -knn
+lsmod | grep 80211
+lspci -d 8086: -knn | grep -A2 -w 7260
 
 Configure Device
 
@@ -103,23 +103,23 @@ sudo apt-get install iw
 sudo apt-get install wpasupplicant
 
 /sbin/iw dev # find wireless device name
-ip link show wlan0 # check if device is up
+ip link show wlp3s0 # check if device is up
 # <BROADCAST,MULTICAST> means not up
 # <BROADCAST,MULTICAST,UP> means up
-sudo ip link set wlan0 up # bring it up
+sudo ip link set wlp3s0 up # bring it up
 # if hang, driver is not loaded properly
-/sbin/iw wlan0 link # check connection
-sudo /sbin/iw wlan0 scan # scan for SSID and RSN(WPA2)
+/sbin/iw wlp3s0 link # check connection
+sudo /sbin/iw wlp3s0 scan # scan for SSID and RSN(WPA2)
 sudo -s
 wpa_passphrase SSID >> /etc/wpa_supplicant.conf
 ...type in the passphrase and hit enter...
 chmod 600 /etc/wpa_supplicant.conf
 exit
-sudo wpa_supplicant -B -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf
+sudo wpa_supplicant -B -D nl80211 -i wlp3s0 -c /etc/wpa_supplicant.conf
 # if you get "ioctl[SIOCSIWENCODEEXT]: Invalid argument", check driver name
-/sbin/iw wlan0 link # check connection
-sudo dhclient wlan0 # obtain IP by DHCP
-ip addr show wlan0 # verify IP
+/sbin/iw wlp3s0 link # check connection
+sudo dhclient wlp3s0 # obtain IP by DHCP
+ip addr show wlp3s0 # verify IP
 
 Edit /etc/network/interfaces to be like:
 
@@ -129,8 +129,8 @@ iface lo inet loopback
 allow-hotplug eth0
 iface eth0 inet dhcp
 
-auto wlan0
-iface wlan0 inet dhcp
+auto wlp3s0
+iface wlp3s0 inet dhcp
 wpa-driver nl80211
 wpa-conf /etc/wpa_supplicant.conf
 
