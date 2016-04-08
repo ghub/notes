@@ -3,7 +3,6 @@ HOST
 ~/.bashrc
 ~/.ssh/config
 /etc/apt/sources.list
-/etc/fstab
 /etc/modprobe.d/pcspeaker-blacklist.conf
 /etc/rinse/rinse.conf
 /etc/schroot/chroot.d/centos-5.conf
@@ -15,6 +14,7 @@ git clone git@github:dev-env/cdl-dev-env-client.git
 
 sudo rinse --distribution centos-5 --arch i386 --directory /srv/chroot/centos5_i386
 cd /srv/chroot/centos5_i386/etc
+ln -s /etc/auto.cdl
 sudo mv yum.repos.d{,.org}
 sudo ln -s ~/repo/cdl-dev-env-client/repo yum.repos.d
 
@@ -64,3 +64,7 @@ rpm -ih squishrun*rpm
 cd /etc
 mv localtime{,.org}
 ln -s /usr/share/zoneinfo/Canada/Mountain localtime
+
+# For auto mount
+yum install autofs
+echo "/cdl    /etc/auto.cdl    --timeout=60" >> /etc/auto.master
