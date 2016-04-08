@@ -249,6 +249,6 @@ Setup NFS
 
 sudo -s
 apt-get install autofs
-echo "/cdl    /etc/auto.cdl" >> /etc/auto.master
-echo "*    san:/cdl/&" > auto.cdl
+echo "/cdl    /etc/auto.cdl    --timeout=60" >> /etc/auto.master
+echo "*    -fstype=nfs,rw,async,vers=3    san:/cdl/&" > auto.cdl
 /etc/init.d/autofs restart
