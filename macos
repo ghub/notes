@@ -1,0 +1,61 @@
+System Preferences
+    General
+        Default web browser: Firefox
+    Language & Region
+        Time Format: 24-Hour
+    Security & Privacy
+        FireVault: on
+        Firewall: on
+    Displays
+        Scaled - More space
+    Keyboard
+        Keyboard - Modifier Keys
+            Swap Caps Lock and Control
+        Shortcuts - App Shortcuts
+            All Applications
+                Zoom: Command-Z
+            Terminal.app
+                New Tab: Shift-Down
+                Show Previous Tab: Shift-Left
+                Show Next Tab: Shift-Right
+    Sound
+        Sound Effects - Show volumn in menu bar
+    Sharing
+        Computer name: macbookpro
+    Date & Time
+        Clock
+            Time options: Digital
+            Date options: Show the day and date
+    Time Machine
+    Accessibility
+        Speech - speak selected text when the key is pressed
+Finder
+    General - Show Hard Disks
+    Sidebar - All
+    Advanced - Show extensions
+Terminal
+    Import Solarized profile
+    Set Solarized Dark as the default profile
+
+Install Firefox extensions
+    Adblock plus
+    ScrapBook
+    #VimFx
+    Vimperator
+Install Chrome entensions
+    Adblock Plus
+    Application Launcher for Drive
+    Google Docs
+    Google Docs Offline
+    Google Sheets
+    Google Slides
+    Merge Windows
+    One Window
+    Vimium
+    WebGL Inspector
+Install OpenGL Extensions Viewer
+Install Printer driver
+    Brother HL-2270DW
+Install Safari entensions
+    Adblock Plus
+Install Scanner driver
