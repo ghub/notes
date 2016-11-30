@@ -59,3 +59,27 @@ Install Printer driver
 Install Safari entensions
     Adblock Plus
 Install Scanner driver
+
+Vimium
+
+Custom key mappings
+
+map <C-f> scrollFullPageDown
+map <C-b> scrollFullPageUp
+
+map t Vomnibar.activateInNewTab
+
+map [T firstTab
+map [t previousTab
+map ]t nextTab
+map ]T lastTab
+
+map ;q removeTab
+unmap x
+
+map jk <escape>
+
+Custom search engines
+
+# Dictionary (Merriam-Webster).
+dw: http://www.merriam-webster.com/dictionary/%s Merriam-Webster
