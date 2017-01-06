@@ -1,0 +1,23 @@
+ge@j
+
+sudo apt-get install salt-master
+sudo salt-key -a dorothy
+
+ge@dorothy
+
+sudo apt-get install salt-minion
+echo master: j | sudo tee /etc/salt/minion.d/master.conf
+sudo systemctl restart salt-minion
+
+root@tacocat
+
+cp -a -r /etc/yum.repos.d{,.20161205}
+add "proxy = https://192.91.173.6:80" to /etc/yum.repos.d/HP*
+create cdl-epel.repo with releasever=7
+add rhnupdate and github to /etc/hosts
+yum update
+yum install salt-minion
+mkdir /etc/salt/minion.d
+echo master: j > /etc/salt/minion.d/master.conf
+systemctl enable salt-minion
+systemctl start salt-minion
