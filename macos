@@ -1,12 +1,12 @@
 System Preferences
     General
-        Default web browser: Firefox
+        Appearance: Dark
+        Default web browser: Google Chrome.app
     Dock
-        Automatically hide and show the dock
+        Automatically hide and show the Dock
     Language & Region
-        Time Format: 24-Hour
+        Time format: 24-Hour Time
     Security & Privacy
-        FireVault: on
         Firewall: on
     Displays
         Scaled - More space
@@ -14,8 +14,6 @@ System Preferences
         Keyboard - Modifier Keys
             Swap Caps Lock and Control
         Shortcuts - App Shortcuts
-            All Applications
-                Zoom: Command-Z
             Terminal.app
                 New Tab: Shift-Down
                 Show Previous Tab: Shift-Left
@@ -24,17 +22,13 @@ System Preferences
         Sound Effects - Show volumn in menu bar
     Sharing
         Computer name: macbookpro
-    Date & Time
-        Clock
-            Time options: Digital
-            Date options: Show the day and date
     Time Machine
     Accessibility
-        Speech - speak selected text when the key is pressed
+        Spoken Content - speak selection
 Finder
     General - Show Hard Disks
     Sidebar - All
-    Advanced - Show extensions
+    Advanced - Show all filename extensions
 Terminal
     Import Solarized profile
     Set Solarized Dark as the default profile
