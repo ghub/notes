@@ -90,4 +90,5 @@ dw: http://www.merriam-webster.com/dictionary/%s Merriam-Webster
 Shell
     Install brew
     brew install bash
+    brew install bash-completion@2 # bash 4.2+
     chsh -s /usr/local/bin/bash
