@@ -86,3 +86,8 @@ Custom search engines
 
 # Dictionary (Merriam-Webster).
 dw: http://www.merriam-webster.com/dictionary/%s Merriam-Webster
+
+Shell
+    Install brew
+    brew install bash
+    chsh -s /usr/local/bin/bash
