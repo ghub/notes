@@ -45,7 +45,7 @@ Terminal
                 Close if the shell exited cleanly
         Keyboard
             Check - Use Option as Meta key
-    Support true color terniaals
+    Support true color terminals
         /etc/ssh/sshd_config AcceptEnv COLORTERM
         /etc/ssh/ssh_config SendEnv COLORTERM
 
